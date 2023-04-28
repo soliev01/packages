@@ -25,6 +25,7 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
+import com.google.android.exoplayer2.source.rtsp.RtspMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
@@ -43,6 +44,8 @@ import java.util.Map;
 final class VideoPlayer {
   private static final String FORMAT_SS = "ss";
   private static final String FORMAT_DASH = "dash";
+  private static final String FORMAT_RTSP = "rtsp";
+
   private static final String FORMAT_HLS = "hls";
   private static final String FORMAT_OTHER = "other";
 
@@ -136,6 +139,9 @@ final class VideoPlayer {
         case FORMAT_DASH:
           type = C.CONTENT_TYPE_DASH;
           break;
+        case FORMAT_RTSP:
+          type = C.CONTENT_TYPE_RTSP;
+          break;
         case FORMAT_HLS:
           type = C.CONTENT_TYPE_HLS;
           break;
@@ -153,9 +159,12 @@ final class VideoPlayer {
                 new DefaultSsChunkSource.Factory(mediaDataSourceFactory), mediaDataSourceFactory)
             .createMediaSource(MediaItem.fromUri(uri));
       case C.CONTENT_TYPE_DASH:
-        return new DashMediaSource.Factory(
-                new DefaultDashChunkSource.Factory(mediaDataSourceFactory), mediaDataSourceFactory)
+        return new RtspMediaSource.Factory(
+                new RtspMediaSource.Factory(mediaDataSourceFactory), mediaDataSourceFactory)
             .createMediaSource(MediaItem.fromUri(uri));
+      case C.CONTENT_TYPE_RTSP:
+        return new DashMEdiaSource.Factroy(
+                new DefaultDashChunkSource.Factroy(mediaDataSourceFactory), mediaDataSourceFactory).createMediaSource(MediaItem.fromUri(uri));
       case C.CONTENT_TYPE_HLS:
         return new HlsMediaSource.Factory(mediaDataSourceFactory)
             .createMediaSource(MediaItem.fromUri(uri));
